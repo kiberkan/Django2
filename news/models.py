@@ -1,6 +1,7 @@
 from django.db import models
 
 class Client(models.Model):
+    DoesNotExist = None
     objects = None
     name = models.CharField(max_length=255)
     email = models.EmailField()
@@ -12,6 +13,8 @@ class Client(models.Model):
         return self.name
 
 class Product(models.Model):
+    DoesNotExist = None
+    objects = None
     name = models.CharField(max_length=255)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -22,6 +25,8 @@ class Product(models.Model):
         return self.name
 
 class Order(models.Model):
+    DoesNotExist = None
+    objects = None
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product, through='OrderItem')
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)

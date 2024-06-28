@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from myproject.news.models import Order, Product, Client
 from django.shortcuts import render
 from .models import Client, Product, Order, OrderItem
