@@ -1,6 +1,7 @@
 from django.db import models
 
 class Client(models.Model):
+    objects = None
     name = models.CharField(max_length=255)
     email = models.EmailField()
     phone_number = models.CharField(max_length=20)
@@ -30,6 +31,7 @@ class Order(models.Model):
         return f'Заказ {self.id} клиента {self.client.name}'
 
 class OrderItem(models.Model):
+    objects = None
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()

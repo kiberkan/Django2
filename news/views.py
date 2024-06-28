@@ -1,4 +1,39 @@
 from myproject.news.models import Order, Product, Client
+from django.shortcuts import render
+from .models import Client, Product, Order, OrderItem
+
+def client_order_history(request, client_id):
+    """Вывод истории заказов клиента с сортировкой по времени."""
+    client = Client.objects.get(pk=client_id)
+    orders = client.order_set.all()
+
+    # Получаем все товары из всех заказов клиента за последние 7 дней
+    products_last_week = set(
+        OrderItem.objects.filter(order__in=orders, order__order_date__gte=datetime.date.today() - datetime.timedelta(days=7))
+        .values_list('product__name', flat=True)
+    )
+    # Получаем все товары из всех заказов клиента за последние 30 дней
+    products_last_month = set(
+        OrderItem.objects.filter(order__in=orders, order__order_date__gte=datetime.date.today() - datetime.timedelta(days=30))
+        .values_list('product__name', flat=True)
+    )
+    # Получаем все товары из всех заказов клиента за последние 365 дней
+    products_last_year = set(
+        OrderItem.objects.filter(order__in=orders, order__order_date__gte=datetime.date.today() - datetime.timedelta(days=365))
+        .values_list('product__name', flat=True)
+    )
+
+    context = {
+        'client': client,
+        'products_last_week': products_last_week,
+        'products_last_month': products_last_month,
+        'products_last_year': products_last_year,
+    }
+    return render(request, 'client_order_history.html', context)
+
+
+
+
 
 
 def create_client(name, email, phone_number, address):
